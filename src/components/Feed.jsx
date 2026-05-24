@@ -202,7 +202,7 @@ function Feed() {
       }),
     );
 
-    // 💡 중요: 만약 상세페이지가 켜져 있다면 상세페이지 데이터도 실시간 동기화해 줍니다.
+    // 만약 상세페이지가 켜져 있다면 상세페이지 데이터도 실시간 동기화
     if (selectedTweet && selectedTweet.id === tweetId) {
       setSelectedTweet((prev) => ({
         ...prev,
@@ -227,7 +227,7 @@ function Feed() {
 
     setTweets(updatedTweets);
 
-    // 💡 중요: 상세페이지가 켜져 있다면 삭제 상태도 실시간 업데이트해 줍니다.
+    // 상세페이지가 켜져 있다면 삭제 상태도 실시간 업데이트
     if (selectedTweet && selectedTweet.id === tweetId) {
       setSelectedTweet((prev) => ({
         ...prev,
@@ -246,7 +246,7 @@ function Feed() {
       userName: "송나영",
       userHandler: "@efub_6th_toy",
       content: inputText,
-      replies: [], // 👈 처음 만들 때 무조건 replies 배열을 초기화해 줍니다.
+      replies: [], // 처음 만들 때 무조건 replies 배열을 초기화
     };
 
     setTweets([newTweet, ...tweets]);
@@ -260,7 +260,7 @@ function Feed() {
     if (selectedTweet && selectedTweet.id === id) setSelectedTweet(null);
   };
 
-  // 💡 상세 트윗 보기(TweetDetail) 활성화 시 스위칭 구역
+  // 상세 트윗 보기(TweetDetail) 활성화 시 스위칭 구역
   if (selectedTweet) {
     return (
       <TweetDetail
@@ -325,7 +325,6 @@ function Feed() {
         </FormWrapper>
       </TweetBox>
 
-      {/* 💡 문법 오류가 해결된 깔끔한 맵핑 구역 */}
       {tweets.map((tweet) => (
         <TweetCard
           key={tweet.id}
@@ -334,7 +333,7 @@ function Feed() {
           onSelect={(selected) => setSelectedTweet(selected)}
           onAddReply={handleAddReply}
           onDeleteReply={handleDeleteReply}
-          isExpanded={false} // 👈 피드 메인에서는 댓글 박스를 상시 숨기고 클릭 시 넘어가도록 false 설정
+          isExpanded={false} // 피드 메인에서는 댓글 박스를 상시 숨기고 클릭 시 넘어가도록 false 설정
         />
       ))}
     </FeedContainer>

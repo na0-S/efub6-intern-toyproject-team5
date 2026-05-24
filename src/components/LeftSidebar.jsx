@@ -27,7 +27,6 @@ const TopMenuWrapper = styled.div`
   width: 100%;
 `;
 
-// 💡 여기서 $active 속성(Prop)을 받아서 스타일을 동적으로 제어합니다!
 const MenuButton = styled(Link)`
   display: flex;
   align-items: center;
@@ -42,7 +41,7 @@ const MenuButton = styled(Link)`
   text-decoration: none;
   width: fit-content;
 
-  /* 🎯 핵심 수정: 활성화($active가 true)되면 800(완전 굵게), 아니면 500(보통 두께) */
+  /* 활성화($active가 true)되면 800(완전 굵게), 아니면 500(보통 두께) */
   font-weight: ${props => props.$active ? '800' : '500'}; 
 
   &:hover {
@@ -73,7 +72,7 @@ const SidebarPostButton = styled.button`
   }
 `;
 
-/* 👤 하단 유저 프로필 카드 스타일 */
+/* 하단 유저 프로필 카드 스타일 */
 const ProfileCard = styled.div`
   display: flex;
   align-items: center;
@@ -144,7 +143,7 @@ function LeftSidebar() {
           />
         </Link>
         
-        {/* 🏠 Home: 주소가 '/home'일 때만 글씨가 두꺼워짐 */}
+        {/* Home: 주소가 '/home'일 때만 글씨가 두꺼워짐 */}
         <MenuButton to="/home" $active={location.pathname === '/home'}>
           <RiHome7Fill size={26} />
           <span>Home</span>
@@ -191,7 +190,7 @@ function LeftSidebar() {
           <span>Premium</span>
         </MenuButton>
         
-        {/* 👤 Profile: 주소가 '/profile'일 때만 글씨가 두꺼워짐 */}
+        {/* Profile: 주소가 '/profile'일 때만 글씨가 두꺼워짐 */}
         <MenuButton to="/profile" $active={location.pathname === '/profile'}>
           <RiUser3Line size={26} />
           <span>Profile</span>

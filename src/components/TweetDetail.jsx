@@ -78,7 +78,7 @@ const TimeStamp = styled.div`
   margin-top: 15px;
 `;
 
-/* 💬 댓글 작성 구역 (Post your reply) */
+/* 댓글 작성 구역 (Post your reply) */
 const ReplyBox = styled.form` 
   display: flex;
   padding: 15px;
@@ -134,7 +134,6 @@ const ReplyItem = styled.div`
   position: relative;
 `;
 
-// 💡 누락되었던 ContentWrapper 스타일 컴포넌트를 추가했습니다!
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -216,7 +215,6 @@ function TweetDetail({ tweet, onBack, onAddReply, onDeleteReply }) {
         {tweet.replies && tweet.replies.map((reply) => (
           <ReplyItem key={reply.id}>
             <BigAvatar style={{ width: '40px', height: '40px' }} />
-            {/* 이제 상단에 선언된 ContentWrapper가 정상적으로 매핑됩니다 */}
             <ContentWrapper>
               <UserInfo style={{ gap: '8px' }}>
                 <span className="name" style={{ fontWeight: 'bold' }}>{reply.userName}</span>

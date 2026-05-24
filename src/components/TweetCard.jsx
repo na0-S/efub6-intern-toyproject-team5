@@ -247,7 +247,7 @@ const TimeText = styled.span`
 
 
 
-// 💡 1. 여기에 'isExpanded'를 Props 받아오는 인자값에 꼭 추가해 주어야 에러가 나지 않습니다!
+// 'isExpanded'를 Props 받아오는 인자값에 꼭 추가해 주어야 에러가 나지 않음!
 
 function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExpanded }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -263,10 +263,9 @@ function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExp
 
   return (
     <div style={{ borderBottom: '1px solid #eff3f4' }}>     
-      {/* 💡 2. 카드 자체를 클릭했을 때 상세조회(onSelect)가 가동되도록 여기에 이벤트를 연결합니다 */}
+      {/* 카드 자체를 클릭했을 때 상세조회(onSelect)가 가동되도록 여기에 이벤트를 연결 */}
       <CardContainer onClick={() => onSelect(tweet)} style={{ borderBottom: 'none', cursor: 'pointer' }}>
         <Avatar />
-        {/* 기존 ContentWrapper에 걸려있던 onClick은 제거하여 이벤트가 중복 실행되는 것을 깔끔하게 정리했습니다 */}
         <ContentWrapper>
           <UserInfo>
             <span className="name">{tweet.userName}</span>
@@ -281,7 +280,7 @@ function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExp
         {/* 우측 상단 점 3개 아이콘 */}
 
         <div style={{ cursor: 'pointer', padding: '4px' }} onClick={(e) => {
-          e.stopPropagation(); // 👈 삭제 모달을 켤 때는 상세 조회창이 열리지 않도록 방지!
+          e.stopPropagation(); // 삭제 모달을 켤 때는 상세 조회창이 열리지 않도록 방지
           setIsModalOpen(!isModalOpen);
         }}>
 
@@ -334,7 +333,7 @@ function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExp
 
 
 
-      {/* 💡 3. 받아온 isExpanded 값에 따라 조건부 렌더링이 정상 작동합니다 */}
+      {/* 받아온 isExpanded 값에 따라 조건부 렌더링이 정상 작동 */}
 
       {isExpanded && (
         <ReplySection onClick={(e) => e.stopPropagation()}> {/* 답글창 영역 클릭 시 상세창이 중복 처리되지 않도록 버블링 방지 */}
@@ -352,16 +351,16 @@ function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExp
 
              
 
-              {/* [삭제] 답글 삭제 버튼 */}
+          {/* [삭제] 답글 삭제 버튼 */}
 
-              <MiniDeleteButton onClick={(e) => {
-                e.stopPropagation(); // 삭제 버튼 누를 때 딴 곳 안 눌리게 막기
-                onDeleteReply(tweet.id, reply.id);
-              }}>
-                Delete
-              </MiniDeleteButton>
-            </ReplyItem>
-          ))}
+            <MiniDeleteButton onClick={(e) => {
+              e.stopPropagation(); // 삭제 버튼 누를 때 딴 곳 안 눌리게 막기
+              onDeleteReply(tweet.id, reply.id);
+            }}>
+              Delete
+            </MiniDeleteButton>
+          </ReplyItem>
+        ))}
 
           {/* [작성] 답글 입력 폼 */}
 

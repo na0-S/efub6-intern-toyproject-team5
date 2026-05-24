@@ -67,7 +67,7 @@ const PremiumText = styled.p`
 `;
 
 const SubscribeButton = styled.button`
-  background-color: #0f1419; /* 라이트 모드에서는 프리미엄 버튼이 검은색입니다! */
+  background-color: #0f1419; /* 라이트 모드에서는 프리미엄 버튼이 검은색 */
   color: #ffffff;
   border: none;
   padding: 10px 16px;

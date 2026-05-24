@@ -8,7 +8,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #ffffff; /* 혹은 다크모드 원하면 #000000 */
+    background-color: #ffffff; 
     color: #0f1419;
   }
 `;

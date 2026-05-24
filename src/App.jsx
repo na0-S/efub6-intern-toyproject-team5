@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // 👈 1. 라우터 부품 임포트
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // 라우터 부품 임포트
 import LeftSidebar from './components/LeftSidebar';
 import Feed from './components/Feed';
-import ProfilePage from './components/ProfilePage'; // 👈 2. 프로필 페이지 임포트
+import ProfilePage from './components/ProfilePage'; // 프로필 페이지 임포트
 import RightSidebar from './components/RightSidebar';
 
 const MainLayout = styled.div`
@@ -20,8 +20,6 @@ function App() {
       <MainLayout>
         {/* 왼쪽 사이드바는 주소가 바뀌어도 늘 고정 */}
         <LeftSidebar />
-        
-        {/* 👈 4. 기존 <Feed /> 자리에 Routes를 넣고 주소에 따라 화면을 스위칭 */}
         <Routes>
           {/* 기본 주소(/)로 들어오면 자동으로 /home으로 리다이렉트 */}
           <Route path="/" element={<Navigate to="/home" />} />
