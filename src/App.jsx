@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // 라우터 부품 임포트
-import LeftSidebar from './components/LeftSidebar';
-import Feed from './components/Feed';
-import ProfilePage from './components/ProfilePage'; // 프로필 페이지 임포트
-import RightSidebar from './components/RightSidebar';
+import LeftSidebar from './components/LeftSidebar/LeftSidebar';
+import Feed from './components/Feed/Feed';
+import ProfilePage from './components/ProfilePage/ProfilePage';
+import RightSidebar from './components/RightSidebar/RightSidebar';
+import TweetDetail from './components/TweetDetail/TweetDetail';
 
 const MainLayout = styled.div`
   display: flex;
