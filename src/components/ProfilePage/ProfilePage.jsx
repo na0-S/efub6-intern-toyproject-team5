@@ -1,19 +1,20 @@
 import React from 'react';
-import TweetCard from '../TweetCard/TweetCard'; // 👈 💡 패턴 B 구조에 맞게 폴더 경로 수정!
-import * as S from './ProfilePage.style';       // 👈 짝꿍 스타일 파일 임포트
+import TweetCard from '../TweetCard/TweetCard'; 
+import * as S from './ProfilePage.style'; 
 
-function ProfilePage() {
-  // 내 데이터 샘플
-  const myTweets = [
-    { id: 101, userName: "송나영", userHandler: "@efub_6th_toy", content: "프로필 화면 구현 완료! ✌️", timeText: "12:52 AM" },
-    { id: 102, userName: "송나영", userHandler: "@efub_6th_toy", content: "라이트 모드.", timeText: "11:30 PM" }
-  ];
+// 💡 부모(App.jsx)로부터 실시간 트윗 전체 상태와 삭제 함수를 넘겨받습니다.
+function ProfilePage({ tweets = [], onDeleteTweet }) {
+  
+  // 💡 전체 트윗 중 "내가 작성한 트윗"만 자바스크립트 filter 함수로 추출합니다.
+  // 백엔드에서 오는 데이터의 핸들러 명칭에 맞춰 검사합니다.
+  const myTweets = Array.isArray(tweets) ? tweets.filter((tweet) => tweet.userHandler === "@efub_6th_toy" || tweet.userName === "송나영") : [];
 
   return (
     <S.ProfileContainer>
       <S.Header>
         <S.HeaderTitle>
           <h2>송나영</h2>
+          {/* 💡 내가 작성한 진짜 트윗 개수가 실시간으로 상단에 표기됩니다. */}
           <span>{myTweets.length} posts</span>
         </S.HeaderTitle>
       </S.Header>
@@ -45,13 +46,13 @@ function ProfilePage() {
         <S.TabItem>Likes</S.TabItem>
       </S.TabBar>
 
-      {/* 내가 쓴 트윗 목록 출력 */}
+      {/* 💡 가짜 대신 내가 필터링한 진짜 트윗 목록 출력 및 삭제 API 연동 */}
       {myTweets.map(tweet => (
         <TweetCard 
-          key={tweet.id} 
+          key={tweet.tweetId} 
           tweet={tweet} 
-          onDelete={() => {}} 
-          onSelect={() => {}} // 👈 TweetCard에 주입할 빈 함수 매핑 유지
+          onDelete={onDeleteTweet} // 내 프로필에서도 바로 삭제 가능하도록 전송!
+          isExpanded={false}
         />
       ))}
     </S.ProfileContainer>

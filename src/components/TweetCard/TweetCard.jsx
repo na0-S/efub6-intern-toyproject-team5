@@ -1,35 +1,39 @@
 import React, { useState } from 'react';
-import * as S from './TweetCard.style'; // 👈 짝꿍 스타일 임포트
+import { useNavigate } from 'react-router-dom'; // 👈 1. 라우터 이동 기능을 위해 임포트
+import * as S from './TweetCard.style'; 
 import { FiMoreHorizontal } from 'react-icons/fi';
 
-function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExpanded }) {
+// 💡 부모 컴포넌트 구조 변경에 맞추어 필요 없어진 onSelect는 과감히 걷어냅니다.
+function TweetCard({ tweet, onDeleteTweet, onAddReply, onDeleteReply, isExpanded }) {
+  const navigate = useNavigate(); // 👈 2. 내비게이션 훅 선언
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [replyText, setReplyText] = useState("");
 
   const handleReplySubmit = (e) => {
     e.preventDefault();
     if (!replyText.trim()) return;
-    onAddReply(tweet.id, replyText);
+    onAddReply(tweet.tweetId, replyText);
     setReplyText("");
   };
 
   return (
     <S.Wrapper> 
-      {/* 카드 전체 클릭 시 상세조회 가동 */}
-      <S.CardContainer onClick={() => onSelect(tweet)}>
+      {/* 👈 3. 카드 클릭 시 상태 변경 대신 고유 ID 주소로 내비게이션 튕겨주기 */}
+      <S.CardContainer onClick={() => navigate(`/post/${tweet.tweetId}`)}>
         <S.Avatar />
         <S.ContentWrapper>
           <S.UserInfo>
-            <span className="name">{tweet.userName}</span>
-            <span className="handler">{tweet.userHandler}</span>
-            <S.TimeText> · {tweet.timeText}</S.TimeText>
+            {/* 백엔드 API 명세서 구조에 프로필 유저 정보 필드가 비어있거나 다를 경우를 대비한 예외 처리 내장 */}
+            <span className="name">{tweet.author?.username || "익명"}</span>
+            <span className="handler">{tweet.author?.handle || "@user"}</span>
+            <S.TimeText> · {tweet.timeText || "Just now"}</S.TimeText>
           </S.UserInfo>
           <S.Text>{tweet.content}</S.Text>
         </S.ContentWrapper>
 
         {/* 우측 상단 점 3개 옵션 아이콘 */}
         <S.MoreIconButton onClick={(e) => {
-          e.stopPropagation(); // 모달 오픈 시 상세페이지 이동 차단
+          e.stopPropagation(); // 모달 오픈 시 상세페이지 주소로 튕기는 현상(버블링) 완벽 차단
           setIsModalOpen(!isModalOpen);
         }}>
           <FiMoreHorizontal color="#71767b" size={18} />
@@ -38,7 +42,7 @@ function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExp
         {/* 대형 팝업 삭제 모달 */}
         {isModalOpen && (
           <S.ModalOverlay onClick={(e) => {
-            e.stopPropagation(); // 백드롭 클릭 시 버그 방지
+            e.stopPropagation(); 
             setIsModalOpen(false);
           }}>
             <S.DeleteConfirmModalBox onClick={(e) => e.stopPropagation()}>
@@ -52,7 +56,7 @@ function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExp
               <S.ModalButtonGroup>
                 <S.PrimaryDeleteButton onClick={(e) => {
                   e.stopPropagation();
-                  onDelete(tweet.id);    
+                  onDeleteTweet(tweet.tweetId);    // 💡 App.jsx의 axios 트윗 삭제 API 가동
                   setIsModalOpen(false);  
                 }}>
                   Delete
@@ -72,15 +76,16 @@ function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExp
 
       {/* 받아온 isExpanded 값에 따라 조건부 렌더링 정상 작동 */}
       {isExpanded && (
-        <S.ReplySection onClick={(e) => e.stopPropagation()}> {/* 중복 처리 버블링 차단 */}
+        <S.ReplySection onClick={(e) => e.stopPropagation()}>
           {/* [조회] 답글 목록 */}
           {tweet.replies && tweet.replies.map((reply) => (
-            <S.ReplyItem key={reply.id}>
+            <S.ReplyItem key={reply.replyId}>
               <S.Avatar $mini />
               <S.ContentWrapper>
                 <S.UserInfo style={{ gap: '6px' }}>
-                  <span className="name" style={{ fontSize: '14px' }}>{reply.userName}</span>
-                  <span className="handler" style={{ fontSize: '14px' }}>{reply.userHandler}</span>
+                  <span className="name" style={{ fontSize: '14px' }}>{reply.author?.username || "익명"}</span>
+                  <span className="handler" style={{ fontSize: '14px' }}>{reply.author?.handle || "@user"}</span>
+                  <span style={{ color: '#536471', fontSize: '14px' }}> · {reply.createdAt || "Just now"}</span>
                 </S.UserInfo>
                 <S.Text style={{ fontSize: '14px', marginTop: '2px' }}>{reply.content}</S.Text>
               </S.ContentWrapper>
@@ -88,7 +93,7 @@ function TweetCard({ tweet, onDelete, onSelect, onAddReply, onDeleteReply, isExp
               {/* [삭제] 답글 삭제 버튼 */}
               <S.MiniDeleteButton onClick={(e) => {
                 e.stopPropagation(); 
-                onDeleteReply(tweet.id, reply.id);
+                onDeleteReply(tweet.tweetId, reply.replyId); // 💡 App.jsx의 axios 답글 삭제 API 가동
               }}>
                 Delete
               </S.MiniDeleteButton>

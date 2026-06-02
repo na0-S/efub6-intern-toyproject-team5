@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // 라우터 부품 임포트
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+// 컴포넌트 임포트 구역
 import LeftSidebar from './components/LeftSidebar/LeftSidebar';
 import Feed from './components/Feed/Feed';
 import ProfilePage from './components/ProfilePage/ProfilePage';
@@ -12,27 +15,143 @@ const MainLayout = styled.div`
   max-width: 1250px;
   margin: 0 auto;
   min-height: 100vh;
-  background-color: #ffffff; /* 라이트 모드 보장 */
+  background-color: #ffffff;
 `;
 
-function App() {
+// 백엔드 서버 Base URL 설정
+const BASE_URL = 'https://efub-6th-toy.p-e.kr';
+
+const AUTH_HEADERS = {
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': '1', 
+    'Auth-id': '1',
+  }
+};
+
+// 💡 [수정] TweetDetailWrapper: 이제 여기서 답글을 병합할 필요가 전혀 없습니다!
+function TweetDetailWrapper({ onAddReply, onDeleteReply }) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [tweet, setTweet] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    axios.get(`${BASE_URL}/tweets/${id}`, AUTH_HEADERS)
+      .then((res) => {
+        // 본문 데이터만 깔끔하게 받아서 넣어줍니다.
+        const tweetData = res.data.tweet || res.data.data || res.data;
+        setTweet(tweetData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("상세 트윗 로드 실패:", err);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) return <div style={{ padding: '20px', color: '#536471' }}>Loading...</div>;
+  if (!tweet) return <div style={{ padding: '20px', color: '#536471' }}>Post not found.</div>;
+
+  // 💡 자식(TweetDetail)에게 부모의 함수들을 가감 없이 그대로 패스해 줍니다.
   return (
-    <Router> {/* 전체를 Router로 감싸주기 */}
+    <TweetDetail 
+      tweet={tweet}
+      onBack={() => navigate('/home')}
+      onAddReply={onAddReply}
+      onDeleteReply={onDeleteReply}
+    />
+  );
+}
+
+function App() {
+  const [tweets, setTweets] = useState([]); 
+
+  // 1. [트윗 전체 조회] (GET /tweets)
+  const fetchTweets = () => {
+    axios.get(`${BASE_URL}/tweets`, AUTH_HEADERS)
+      .then((res) => {
+        setTweets(res.data.tweets || res.data);
+      })
+      .catch((err) => console.error("트윗 리스트 로드 실패:", err));
+  };
+
+  useEffect(() => {
+    fetchTweets();
+  }, []);
+
+  // 2. [트윗 작성] (POST /tweets)
+  const handleAddTweet = (content) => {
+    axios.post(`${BASE_URL}/tweets`, { content: content }, AUTH_HEADERS)
+      .then(() => {
+        fetchTweets(); 
+      })
+      .catch((err) => console.error("트윗 작성 에러:", err));
+  };
+
+  // 3. [트윗 삭제] (DELETE /tweets/{tweetId})
+  const handleDeleteTweet = (tweetId) => {
+    axios.delete(`${BASE_URL}/tweets/${tweetId}`, AUTH_HEADERS)
+      .then(() => {
+        setTweets(tweets.filter((t) => t.tweetId !== tweetId));
+      })
+      .catch((err) => console.error("트윗 삭제 에러:", err));
+  };
+
+  // 4. [답글 작성] (POST /tweets/{tweetId}/replies)
+  const handleAddReply = async (tweetId, replyContent) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/tweets/${tweetId}/replies`, { content: replyContent }, AUTH_HEADERS);
+      fetchTweets(); // 메인 피드 갱신
+      return response; // 💡 TweetDetail 컴포넌트가 .then()을 이어서 쓸 수 있도록 무조건 리턴!
+    } catch (err) {
+      console.error("답글 추가 실패:", err);
+      throw err;
+    }
+  };
+
+  // 5. [답글 삭제] (DELETE /replies/{replyId})
+  // 🚨 [404 해결 핵심] 명세서 구조상 단독 삭제 주소인 `/replies/{replyId}`일 확률이 매우 높습니다!
+  const handleDeleteReply = async (tweetId, replyId) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/replies/${replyId}`, AUTH_HEADERS);
+      fetchTweets(); // 메인 피드 갱신
+      return response; // 💡 자식이 삭제 완료 신호를 받고 화면을 새로고침할 수 있게 리턴!
+    } catch (err) {
+      console.error("답글 삭제 실패:", err);
+      throw err;
+    }
+  };
+
+  return (
+    <Router>
       <MainLayout>
-        {/* 왼쪽 사이드바는 주소가 바뀌어도 늘 고정 */}
         <LeftSidebar />
+        
         <Routes>
-          {/* 기본 주소(/)로 들어오면 자동으로 /home으로 리다이렉트 */}
           <Route path="/" element={<Navigate to="/home" />} />
           
-          {/* /home 일 때는 기존 홈 피드 화면 */}
-          <Route path="/home" element={<Feed />} />
+          <Route path="/home" element={
+            <Feed 
+              tweets={tweets}
+              onAddTweet={handleAddTweet}
+              onDeleteTweet={handleDeleteTweet}
+              onAddReply={handleAddReply}
+              onDeleteReply={handleDeleteReply}
+            />
+          } />
           
-          {/* /profile 일 때는 내 프로필 조회 화면 */}
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile" element={<ProfilePage tweets={tweets} onDeleteTweet={handleDeleteTweet} />} />
+
+          <Route path="/post/:id" element={
+            <TweetDetailWrapper 
+              onAddReply={handleAddReply}
+              onDeleteReply={handleDeleteReply}
+            />
+          } />
         </Routes>
         
-        {/* 오른쪽 사이드바도 주소가 바뀌어도 늘 고정 */}
         <RightSidebar />
       </MainLayout>
     </Router>
