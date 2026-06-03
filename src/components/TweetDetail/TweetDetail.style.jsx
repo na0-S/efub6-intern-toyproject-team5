@@ -159,3 +159,52 @@ export const MiniDeleteButton = styled.button`
     text-decoration: underline;
   }
 `;
+
+export const IconGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  width: 100%;
+  color: #536471;   
+`;
+
+export const IconItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  svg {
+    padding: 6px;
+    border-radius: 50%;
+    box-sizing: content-box;
+    transition: background-color 0.2s ease;
+  }
+
+  &:hover {
+    color: #1d9bf0; 
+    svg { background-color: rgba(29, 155, 240, 0.1); }
+  }
+  &:nth-child(2):hover {
+    color: #00ba7c;
+    svg { background-color: rgba(0, 186, 124, 0.1); }
+  }
+  &:nth-child(3):hover {
+    color: #f91880;
+    svg { background-color: rgba(249, 24, 128, 0.1); }
+  }
+`;
+
+export const RightIcons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  div:hover {
+    color: #1d9bf0;
+    svg { background-color: rgba(29, 155, 240, 0.1); }
+  }
+`;

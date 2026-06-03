@@ -49,7 +49,6 @@ export const MoreIconButton = styled.div`
   padding: 4px;
 `;
 
-// 1. 모달 오버레이 (백드롭 블러)
 export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -64,7 +63,6 @@ export const ModalOverlay = styled.div`
   align-items: center;
 `;
 
-// 2. 모달 컨텐츠 박스
 export const DeleteConfirmModalBox = styled.div`
   background-color: #000000;
   width: 320px;
@@ -126,7 +124,6 @@ export const SecondaryCancelButton = styled(BaseModalButton)`
   &:hover { background-color: #16181c; }
 `;
 
-// 3. 답글 섹션 구역
 export const ReplySection = styled.div`
   background-color: #f7f9f9;
   border-top: 1px solid #eff3f4;
@@ -143,6 +140,15 @@ export const ReplyItem = styled.div`
   border-bottom: 1px solid #f1f3f4;
   position: relative;
   &:last-child { border-bottom: none; }
+`;
+
+/* 🌟 [추가] 답글창 전용 우측 콘텐츠 영역 (유령 레이아웃 파괴용 핵심 처방) */
+export const ReplyContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0; /* 자식 아이콘 그룹이 자리를 잡을 수 있게 가로 공간을 강제로 확장합니다 */
 `;
 
 export const ReplyInputForm = styled.form`
@@ -192,15 +198,14 @@ export const MiniDeleteButton = styled.button`
   }
 `;
 
-// 하단 아이콘 레이아웃 스타일드 컴포넌트 추가
-
 export const IconGroup = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 12px;
-  max-width: 425px; /* 실제 트위터처럼 본문 너비에 맞춰 적절히 제한 */
-  color: #536471;   /* 트위터 기본 아이콘 회색 톤 */
+  width: 100%;
+  max-width: 425px; 
+  color: #536471;   
 `;
 
 export const IconItem = styled.div`
@@ -218,28 +223,19 @@ export const IconItem = styled.div`
     transition: background-color 0.2s ease;
   }
 
-  /* 마우스 호버 시 트위터 고유의 은은한 인터랙션 효과 */
   &:hover {
-    color: #1d9bf0; /* 파란색으로 변경 */
-    svg {
-      background-color: rgba(29, 155, 240, 0.1);
-    }
+    color: #1d9bf0; 
+    svg { background-color: rgba(29, 155, 240, 0.1); }
   }
 
-  /* 세 번째 아이콘(좋아요)은 핑크색 호버 효과를 주면 더 트위터 같습니다! */
-  &:nth-child(3):hover {
-    color: #f91880;
-    svg {
-      background-color: rgba(249, 24, 128, 0.1);
-    }
-  }
-  
-  /* 두 번째 아이콘(리트윗)은 초록색 호버 효과 */
   &:nth-child(2):hover {
     color: #00ba7c;
-    svg {
-      background-color: rgba(0, 186, 124, 0.1);
-    }
+    svg { background-color: rgba(0, 186, 124, 0.1); }
+  }
+
+  &:nth-child(3):hover {
+    color: #f91880;
+    svg { background-color: rgba(249, 24, 128, 0.1); }
   }
 `;
 
@@ -248,11 +244,8 @@ export const RightIcons = styled.div`
   align-items: center;
   gap: 4px;
   
-  /* 마지막 북마크와 공유하기 아이콘은 숫자가 없으므로 호버 시 파란색만 돌도록 세팅 */
-  ${IconItem}:hover {
+  div:hover {
     color: #1d9bf0;
-    svg {
-      background-color: rgba(29, 155, 240, 0.1);
-    }
+    svg { background-color: rgba(29, 155, 240, 0.1); }
   }
 `;

@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // 👈 직접 통신하기 위해 추가!
+import axios from 'axios'; 
 import * as S from './TweetDetail.style'; 
 import { IoArrowBackOutline } from 'react-icons/io5'; 
 import { FiMoreHorizontal } from 'react-icons/fi';
+
+// 🌟 [추가] 답글 아이콘 출력을 위해 아이콘 모듈 임포트
+import {
+  AiOutlineMessage,
+  AiOutlineRetweet,
+  AiOutlineHeart,
+} from "react-icons/ai";
+import { BiBookmark, BiBarChartAlt2 } from "react-icons/bi";
+import { FiUpload } from "react-icons/fi";
 
 const BASE_URL = 'https://efub-6th-toy.p-e.kr';
 const AUTH_HEADERS = {
@@ -15,9 +24,8 @@ const AUTH_HEADERS = {
 
 function TweetDetail({ tweet, onBack, onAddReply, onDeleteReply }) {
   const [replyText, setReplyText] = useState(""); 
-  const [replies, setReplies] = useState([]); // 👈 답글만 따로 관리하는 상태 상자 생성!
+  const [replies, setReplies] = useState([]); 
 
-  // 1. 상세 페이지가 켜지면, 이 트윗에 달린 답글만 쏙 긁어옵니다.
   const fetchReplies = () => {
     if (!tweet?.tweetId) return;
     axios.get(`${BASE_URL}/tweets/${tweet.tweetId}/replies`, AUTH_HEADERS)
@@ -31,39 +39,33 @@ function TweetDetail({ tweet, onBack, onAddReply, onDeleteReply }) {
     fetchReplies();
   }, [tweet?.tweetId]);
 
-  // 2. 답글 등록할 때
   const handleReplySubmit = (e) => {
     e.preventDefault();
     if (!replyText.trim()) return;
 
     onAddReply(tweet.tweetId, replyText).then(() => {
-      fetchReplies(); // 등록 성공하면 답글 목록만 새로고침!
+      fetchReplies(); 
       setReplyText(""); 
     });
   };
 
   if (!tweet) return <div style={{ padding: '20px', color: '#536471' }}>Loading...</div>;
 
-  // 💡 ISO 시간 문자열을 "2026년 6월 2일 오후 8:28" 형태로 바꿔주는 예쁜 함수
-const formatDetailTime = (isoString) => {
-  if (!isoString) return "Just now";
-  
-  const date = new Date(isoString);
-  
-  // 한국 시간 및 원하는 표기 스타일에 맞게 옵션 설정
-  return date.toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true // 오후/오전 표시
-  });
-};
+  const formatDetailTime = (isoString) => {
+    if (!isoString) return "Just now";
+    const date = new Date(isoString);
+    return date.toLocaleString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true 
+    });
+  };
 
   return (
     <S.DetailContainer>
-      {/* ... 상단 헤더 및 본문 영역 (기존과 동일) ... */}
       <S.Header>
         <S.BackButton onClick={onBack}><IoArrowBackOutline size={22} /></S.BackButton>
         <span>Post</span>
@@ -95,7 +97,7 @@ const formatDetailTime = (isoString) => {
         <S.ReplyButton type="submit" disabled={!replyText.trim()}>Reply</S.ReplyButton>
       </S.ReplyBox>
 
-      {/* 🌟 이제 tweet.replies 대신, 방금 따로 불러온 'replies' 변수로 화면을 그립니다! */}
+      {/* 답글 목록 리스트 구역 */}
       <S.ReplyListContainer>
         {replies.map((reply) => (
           <S.ReplyItem key={reply.replyId}>
@@ -107,6 +109,39 @@ const formatDetailTime = (isoString) => {
                 <span style={{ color: '#536471', fontSize: '15px' }}> · {formatDetailTime(reply.createdAt)}</span>
               </S.UserInfo>
               <S.ReplyText>{reply.content}</S.ReplyText>
+
+              {/* 🌟 [수정] 답글 텍스트 바로 하단에 아이콘 세트 대형 주입! */}
+              <S.IconGroup style={{ maxWidth: "380px", marginTop: "8px" }}>
+                <S.IconItem>
+                  <AiOutlineMessage size={16} />
+                  <span>{reply.replyCount ?? 0}</span>
+                </S.IconItem>
+
+                <S.IconItem>
+                  <AiOutlineRetweet size={16} />
+                  <span>{reply.retweetCount ?? 0}</span>
+                </S.IconItem>
+
+                <S.IconItem>
+                  <AiOutlineHeart size={16} />
+                  <span>{reply.likeCount ?? 0}</span>
+                </S.IconItem>
+
+                <S.IconItem>
+                  <BiBarChartAlt2 size={16} />
+                  <span>{reply.viewCount ?? 0}</span>
+                </S.IconItem>
+
+                <S.RightIcons>
+                  <S.IconItem>
+                    <BiBookmark size={16} />
+                  </S.IconItem>
+                  <S.IconItem>
+                    <FiUpload size={16} />
+                  </S.IconItem>
+                </S.RightIcons>
+              </S.IconGroup>
+
             </S.ContentWrapper>
 
             <S.MiniDeleteButton onClick={() => onDeleteReply(tweet.tweetId, reply.replyId).then(() => fetchReplies())}>
