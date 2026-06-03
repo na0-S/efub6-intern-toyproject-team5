@@ -7,7 +7,7 @@ import { RiImageLine, RiFileGifLine, RiEmotionLine, RiCalendarTodoLine } from "r
 import { IoLocationOutline } from "react-icons/io5";
 import { CgPoll } from "react-icons/cg";
 
-// 💡 부모(App.jsx)가 관리하는 데이터와 함수를 Props로 깔끔하게 받아옵니다.
+// 부모(App.jsx)가 관리하는 데이터와 함수를 Props로 깔끔하게 받아옴
 function Feed({ tweets, onAddTweet, onDeleteTweet, onAddReply, onDeleteReply }) {
   const [inputText, setInputText] = useState("");
 
@@ -15,7 +15,7 @@ function Feed({ tweets, onAddTweet, onDeleteTweet, onAddReply, onDeleteReply }) 
     e.preventDefault();
     if (!inputText.trim()) return;
 
-    // 💡 App.jsx의 axios 트윗 작성 API 함수 가동
+    // App.jsx의 axios 트윗 작성 API 함수 가동
     onAddTweet(inputText); 
     setInputText(""); // 입력창 리셋
   };
@@ -61,7 +61,7 @@ function Feed({ tweets, onAddTweet, onDeleteTweet, onAddReply, onDeleteReply }) 
         </S.FormWrapper>
       </S.TweetBox>
 
-      {/* 💡 백엔드 데이터베이스에서 불러온 진짜 트윗 목록 실시간 바인딩 */}
+      {/* 백엔드 데이터베이스에서 불러온 진짜 트윗 목록 실시간 바인딩 */}
       {Array.isArray(tweets) ? (
         tweets.map((tweet) => (
           <TweetCard

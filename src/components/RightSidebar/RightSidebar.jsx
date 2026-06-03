@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as S from './RightSidebar.style'; // 👈 짝꿍 스타일 임포트
+import * as S from './RightSidebar.style'; // 스타일 임포트
 
 // 아이콘 임포트
 import { IoSearchOutline } from 'react-icons/io5'; 

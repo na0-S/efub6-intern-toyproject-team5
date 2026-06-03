@@ -114,3 +114,9 @@ export const TabItem = styled.div`
     }
   `}
 `;
+
+// 5. 트윗 목록
+export const TweetListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;

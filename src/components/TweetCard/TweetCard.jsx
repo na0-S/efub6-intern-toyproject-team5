@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom'; // 👈 1. 라우터 이동 기�
 import * as S from './TweetCard.style'; 
 import { FiMoreHorizontal } from 'react-icons/fi';
 
+import { AiOutlineMessage, AiOutlineRetweet, AiOutlineHeart } from 'react-icons/ai';
+import { BiBookmark, BiBarChartAlt2 } from 'react-icons/bi';
+import { FiUpload } from 'react-icons/fi';
+
 // 💡 부모 컴포넌트 구조 변경에 맞추어 필요 없어진 onSelect는 과감히 걷어냅니다.
 function TweetCard({ tweet, onDeleteTweet, onAddReply, onDeleteReply, isExpanded }) {
   const navigate = useNavigate(); // 👈 2. 내비게이션 훅 선언
@@ -29,6 +33,41 @@ function TweetCard({ tweet, onDeleteTweet, onAddReply, onDeleteReply, isExpanded
             <S.TimeText> · {tweet.timeText || "Just now"}</S.TimeText>
           </S.UserInfo>
           <S.Text>{tweet.content}</S.Text>
+          <S.IconGroup>
+            {/* 답글 (Reply) */}
+            <S.IconItem onClick={(e) => e.stopPropagation()}>
+              <AiOutlineMessage size={18} />
+              <span>{tweet.replyCount ?? 0}</span>
+            </S.IconItem>
+
+            {/* 리트윗 (Retweet) */}
+            <S.IconItem onClick={(e) => e.stopPropagation()}>
+              <AiOutlineRetweet size={18} />
+              <span>{tweet.retweetCount ?? 0}</span>
+            </S.IconItem>
+
+            {/* 좋아요 (Like) */}
+            <S.IconItem onClick={(e) => e.stopPropagation()}>
+              <AiOutlineHeart size={18} />
+              <span>{tweet.likeCount ?? 0}</span>
+            </S.IconItem>
+
+            {/* 조회수 (View) */}
+            <S.IconItem onClick={(e) => e.stopPropagation()}>
+              <BiBarChartAlt2 size={18} style={{ transform: 'rotate(0deg)' }} /> 
+              <span>{tweet.viewCount ?? 0}</span>
+            </S.IconItem>
+
+            {/* 북마크 및 공유하기 (우측 정렬용 서브 그룹) */}
+            <S.RightIcons>
+              <S.IconItem onClick={(e) => e.stopPropagation()}>
+                <BiBookmark size={18} />
+              </S.IconItem>
+              <S.IconItem onClick={(e) => e.stopPropagation()}>
+                <FiUpload size={18} />
+              </S.IconItem>
+            </S.RightIcons>
+          </S.IconGroup>
         </S.ContentWrapper>
 
         {/* 우측 상단 점 3개 옵션 아이콘 */}

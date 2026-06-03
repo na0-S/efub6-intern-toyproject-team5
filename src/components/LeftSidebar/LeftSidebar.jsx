@@ -95,8 +95,8 @@ function LeftSidebar() {
         <S.ProfileInfo>
           <S.Avatar />
           <S.TextGroup>
-            <S.UserName>송나영</S.UserName>
-            <S.UserHandler>@efub_6th_toy</S.UserHandler>
+            <S.UserName>나영</S.UserName>
+            <S.UserHandler>@luxen0</S.UserHandler>
           </S.TextGroup>
         </S.ProfileInfo>
         <FiMoreHorizontal size={18} color="#0f1419" />

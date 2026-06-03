@@ -67,6 +67,8 @@ function TweetDetailWrapper({ onAddReply, onDeleteReply }) {
 
 function App() {
   const [tweets, setTweets] = useState([]); 
+  const [myTweets, setMyTweets] = useState([]);
+
 
   // 1. [트윗 전체 조회] (GET /tweets)
   const fetchTweets = () => {
@@ -77,15 +79,30 @@ function App() {
       .catch((err) => console.error("트윗 리스트 로드 실패:", err));
   };
 
+  // 1-2. [내 트윗 전용 조회 함수]
+  const fetchMyTweets = () => {
+    // 현재 나영님의 가상 Auth-id가 '1'번이므로 주소창에 1을 고정해서 찌릅니다!
+    axios.get(`${BASE_URL}/users/1/tweets`, AUTH_HEADERS)
+      .then((res) => {
+        // 알맹이인 tweets 배열만 쏙 골라내서 상자에 저장 (없으면 빈 배열)
+        setMyTweets(res.data.tweets || []);
+      })
+      .catch((err) => console.error("내 트윗 로드 실패:", err));
+  };
+
   useEffect(() => {
     fetchTweets();
+    fetchMyTweets();
   }, []);
+
+
 
   // 2. [트윗 작성] (POST /tweets)
   const handleAddTweet = (content) => {
     axios.post(`${BASE_URL}/tweets`, { content: content }, AUTH_HEADERS)
       .then(() => {
         fetchTweets(); 
+        fetchMyTweets();
       })
       .catch((err) => console.error("트윗 작성 에러:", err));
   };
@@ -94,7 +111,8 @@ function App() {
   const handleDeleteTweet = (tweetId) => {
     axios.delete(`${BASE_URL}/tweets/${tweetId}`, AUTH_HEADERS)
       .then(() => {
-        setTweets(tweets.filter((t) => t.tweetId !== tweetId));
+        fetchTweets();   // 메인 피드 새로고침
+        fetchMyTweets(); // 프로필 피드 새로고침
       })
       .catch((err) => console.error("트윗 삭제 에러:", err));
   };
@@ -142,7 +160,11 @@ function App() {
             />
           } />
           
-          <Route path="/profile" element={<ProfilePage tweets={tweets} onDeleteTweet={handleDeleteTweet} />} />
+          <Route path="/profile" element={
+            <ProfilePage 
+            tweets={tweets} 
+            onDeleteTweet={handleDeleteTweet} />
+          } />
 
           <Route path="/post/:id" element={
             <TweetDetailWrapper 
