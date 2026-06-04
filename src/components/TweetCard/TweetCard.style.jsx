@@ -142,13 +142,13 @@ export const ReplyItem = styled.div`
   &:last-child { border-bottom: none; }
 `;
 
-/* 🌟 [추가] 답글창 전용 우측 콘텐츠 영역 (유령 레이아웃 파괴용 핵심 처방) */
+/* 답글창 전용 우측 콘텐츠 영역 */
 export const ReplyContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   flex: 1;
-  min-width: 0; /* 자식 아이콘 그룹이 자리를 잡을 수 있게 가로 공간을 강제로 확장합니다 */
+  min-width: 0; /* 자식 아이콘 그룹이 자리를 잡을 수 있게 가로 공간을 강제로 확장 */
 `;
 
 export const ReplyInputForm = styled.form`

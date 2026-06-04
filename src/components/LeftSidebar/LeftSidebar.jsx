@@ -1,9 +1,9 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import * as S from './LeftSidebar.style'; // 👈 짝꿍 스타일 임포트
+import * as S from './LeftSidebar.style'; 
 
 // 이미지 및 아이콘 임포트
-import TwitterLogoImg from '../../assets/X-logo.png'; // 👈 폴더가 한 단계 깊어졌으므로 ../../로 경로 수정!
+import TwitterLogoImg from '../../assets/X-logo.png'; 
 import { FiMoreHorizontal } from 'react-icons/fi'; 
 import { RiHome7Fill, RiSearchLine, RiNotification3Line, RiMailLine, RiFileList2Line, RiBookmarkLine, RiUser3Line, RiTwitterXFill } from 'react-icons/ri';
 import { BiNavigation, BiGroup } from 'react-icons/bi';

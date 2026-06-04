@@ -29,7 +29,7 @@ const AUTH_HEADERS = {
   }
 };
 
-// 💡 [수정] TweetDetailWrapper: 이제 여기서 답글을 병합할 필요가 전혀 없습니다!
+// TweetDetailWrapper
 function TweetDetailWrapper({ onAddReply, onDeleteReply }) {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ function TweetDetailWrapper({ onAddReply, onDeleteReply }) {
   if (loading) return <div style={{ padding: '20px', color: '#536471' }}>Loading...</div>;
   if (!tweet) return <div style={{ padding: '20px', color: '#536471' }}>Post not found.</div>;
 
-  // 💡 자식(TweetDetail)에게 부모의 함수들을 가감 없이 그대로 패스해 줍니다.
+  // 자식(TweetDetail)에게 부모의 함수들 그대로 패스
   return (
     <TweetDetail 
       tweet={tweet}
@@ -81,7 +81,7 @@ function App() {
 
   // 1-2. [내 트윗 전용 조회 함수]
   const fetchMyTweets = () => {
-    // 현재 나영님의 가상 Auth-id가 '1'번이므로 주소창에 1을 고정해서 찌릅니다!
+    // 현재 가상 Auth-id가 '1'번이므로 주소창에 1을 고정
     axios.get(`${BASE_URL}/users/1/tweets`, AUTH_HEADERS)
       .then((res) => {
         // 알맹이인 tweets 배열만 쏙 골라내서 상자에 저장 (없으면 빈 배열)
@@ -130,12 +130,11 @@ function App() {
   };
 
   // 5. [답글 삭제] (DELETE /replies/{replyId})
-  // 🚨 [404 해결 핵심] 명세서 구조상 단독 삭제 주소인 `/replies/{replyId}`일 확률이 매우 높습니다!
   const handleDeleteReply = async (tweetId, replyId) => {
     try {
       const response = await axios.delete(`${BASE_URL}/replies/${replyId}`, AUTH_HEADERS);
       fetchTweets(); // 메인 피드 갱신
-      return response; // 💡 자식이 삭제 완료 신호를 받고 화면을 새로고침할 수 있게 리턴!
+      return response; // 자식이 삭제 완료 신호를 받고 화면을 새로고침할 수 있게 리턴
     } catch (err) {
       console.error("답글 삭제 실패:", err);
       throw err;

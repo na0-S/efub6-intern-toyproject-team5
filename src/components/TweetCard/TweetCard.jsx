@@ -136,7 +136,6 @@ function TweetCard({
               <S.ReplyItem key={reply.replyId}>
                 <S.Avatar $mini />
 
-                {/* ⭕ [변경] S.ContentWrapper 대신 전용 레이아웃인 S.ReplyContent 가동 */}
                 <S.ReplyContent>
                   <S.UserInfo style={{ gap: "6px" }}>
                     <span className="name" style={{ fontSize: "14px" }}>

@@ -6,7 +6,7 @@ import * as S from './ProfilePage.style';
 function ProfilePage({ tweets = [], onDeleteTweet }) {
   
   // 전체 트윗 중 "내가 작성한 트윗"만 자바스크립트 filter 함수로 추출
-  // 백엔드에서 오는 데이터의 핸들러 명칭에 맞춰 검사
+  // 백엔드에서 오는 데이터의 핸들 명칭에 맞춰 검사
   const myTweets = Array.isArray(tweets) 
     ? tweets.filter((tweet) => 
         tweet.author?.handle === "luxen0" || 

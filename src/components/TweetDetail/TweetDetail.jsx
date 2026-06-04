@@ -4,7 +4,6 @@ import * as S from './TweetDetail.style';
 import { IoArrowBackOutline } from 'react-icons/io5'; 
 import { FiMoreHorizontal } from 'react-icons/fi';
 
-// 🌟 [추가] 답글 아이콘 출력을 위해 아이콘 모듈 임포트
 import {
   AiOutlineMessage,
   AiOutlineRetweet,
@@ -110,7 +109,7 @@ function TweetDetail({ tweet, onBack, onAddReply, onDeleteReply }) {
               </S.UserInfo>
               <S.ReplyText>{reply.content}</S.ReplyText>
 
-              {/* 🌟 [수정] 답글 텍스트 바로 하단에 아이콘 세트 대형 주입! */}
+              {/* 답글 텍스트 바로 하단에 아이콘 세트 */}
               <S.IconGroup style={{ maxWidth: "380px", marginTop: "8px" }}>
                 <S.IconItem>
                   <AiOutlineMessage size={16} />
